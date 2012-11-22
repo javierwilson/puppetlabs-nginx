@@ -13,6 +13,7 @@
 #   [*proxy*]              - Proxy server(s) for a location to connect to. Accepts a single value, can be used in conjunction
 #                            with nginx::resource::upstream
 #   [*proxy_read_timeout*] - Override the default the proxy read timeout value of 90 seconds
+#   [*force_ssl*]          - Redirects http to https
 #   [*ssl*]                - Indicates whether to setup SSL bindings for this location.
 #   [*option*]             - Reserved for future use
 #
