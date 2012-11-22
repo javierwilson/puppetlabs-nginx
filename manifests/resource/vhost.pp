@@ -82,6 +82,7 @@ define nginx::resource::vhost(
     ensure             => $ensure,
     vhost              => $name,
     ssl                => $ssl,
+    force_ssl          => $force_ssl,
     location           => '/',
     proxy              => $proxy,
     proxy_read_timeout => $proxy_read_timeout,

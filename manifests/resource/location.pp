@@ -35,6 +35,7 @@ define nginx::resource::location(
   $index_files        = ['index.html', 'index.htm', 'index.php'],
   $proxy              = undef,
   $proxy_read_timeout = $nginx::params::nx_proxy_read_timeout,
+  $force_ssl          = false,
   $ssl                = false,
   $option             = undef,
   $location
@@ -55,12 +56,19 @@ define nginx::resource::location(
   # Use proxy template if $proxy is defined, otherwise use directory template.
   if ($proxy != undef) {
     $content_real = template('nginx/vhost/vhost_location_proxy.erb')
+  } elsif ($force_ssl == 'true') {
+    $content_real = template('nginx/vhost/vhost_location_force_ssl.erb')
   } elsif ($alias_root != undef) {
     $content_real = template('nginx/vhost/vhost_location_alias.erb')
   } else {
     $content_real = template('nginx/vhost/vhost_location_directory.erb')
   }
 
+  # templates for ssl
+  $content_real_ssl = $content_real
+  if ($proxy != undef and $ssl == 'true') {
+    $content_real_ssl = template('nginx/vhost/vhost_location_proxy_ssl.erb')
+  }
   ## Check for various error condtiions
   if ($vhost == undef) {
     fail('Cannot create a location reference without attaching to a virtual host')
@@ -88,7 +96,7 @@ define nginx::resource::location(
   if ($ssl == 'true') {
     file {"${nginx::config::nx_temp_dir}/nginx.d/${vhost}-800-${name}-ssl":
       ensure  => $ensure_real,
-      content => $content_real,
+      content => $content_real_ssl,
     }
   }
 }
