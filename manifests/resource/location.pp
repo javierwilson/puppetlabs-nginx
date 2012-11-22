@@ -65,9 +65,10 @@ define nginx::resource::location(
   }
 
   # templates for ssl
-  $content_real_ssl = $content_real
   if ($proxy != undef and $ssl == 'true') {
     $content_real_ssl = template('nginx/vhost/vhost_location_proxy_ssl.erb')
+  } else {
+    $content_real_ssl = $content_real
   }
   ## Check for various error condtiions
   if ($vhost == undef) {
