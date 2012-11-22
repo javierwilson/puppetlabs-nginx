@@ -37,7 +37,7 @@ define nginx::resource::location(
   $proxy              = undef,
   $proxy_read_timeout = $nginx::params::nx_proxy_read_timeout,
   $force_ssl          = false,
-  $ssl                = false,
+  $ssl                = $force_ssl,
   $option             = undef,
   $location
 ) {
@@ -55,10 +55,10 @@ define nginx::resource::location(
   }
 
   # Use proxy template if $proxy is defined, otherwise use directory template.
-  if ($proxy != undef) {
-    $content_real = template('nginx/vhost/vhost_location_proxy.erb')
-  } elsif ($force_ssl == 'true') {
+  if ($force_ssl == 'true') {
     $content_real = template('nginx/vhost/vhost_location_force_ssl.erb')
+  } elsif ($proxy != undef) {
+    $content_real = template('nginx/vhost/vhost_location_proxy.erb')
   } elsif ($alias_root != undef) {
     $content_real = template('nginx/vhost/vhost_location_alias.erb')
   } else {
