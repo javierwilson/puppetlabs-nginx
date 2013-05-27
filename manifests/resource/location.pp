@@ -19,6 +19,7 @@
 #   [*location_cfg_append*]  - It expects a hash with custom directives to put after everything else inside location   
 #   [*try_files*]            - An array of file locations to try
 #   [*option*]               - Reserved for future use
+#   [*force_ssl*]            - Redirects http to https
 #
 # Actions:
 #
@@ -54,7 +55,8 @@ define nginx::resource::location(
   $index_files          = ['index.html', 'index.htm', 'index.php'],
   $proxy                = undef,
   $proxy_read_timeout   = $nginx::params::nx_proxy_read_timeout,
-  $ssl                  = false,
+  $force_ssl            = false,
+  $ssl                  = $force_ssl,
   $ssl_only		= false,
   $location_alias       = undef,
   $option               = undef,
@@ -78,7 +80,9 @@ define nginx::resource::location(
   }
 
   # Use proxy template if $proxy is defined, otherwise use directory template.
-  if ($proxy != undef) {
+  if ($force_ssl == 'true') {
+    $content_real = template('nginx/vhost/vhost_location_force_ssl.erb')
+  } elsif ($proxy != undef) {
     $content_real = template('nginx/vhost/vhost_location_proxy.erb')
   } elsif ($location_alias != undef) {
     $content_real = template('nginx/vhost/vhost_location_alias.erb')

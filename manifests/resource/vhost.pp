@@ -26,6 +26,7 @@
 #   [*rewrite_www_to_non_www*]  - Adds a server directive and rewrite rule to rewrite www.domain.com to domain.com in order to avoid
 #                             duplicate content (SEO);
 #   [*try_files*]           - Specifies the locations for files to be checked as an array. Cannot be used in conjuction with $proxy.
+#   [*force_ssl*]           - Redirects http to https
 #
 # Actions:
 #
@@ -48,7 +49,8 @@ define nginx::resource::vhost(
   $ipv6_listen_ip         = '::',
   $ipv6_listen_port       = '80',
   $ipv6_listen_options    = 'default',
-  $ssl                    = false,
+  $force_ssl              = false,
+  $ssl                    = $force_ssl,
   $ssl_cert               = undef,
   $ssl_key                = undef,
   $ssl_port		  = '443',
@@ -103,6 +105,7 @@ define nginx::resource::vhost(
   nginx::resource::location {"${name}-default":
     ensure               => $ensure,
     vhost                => $name,
+    force_ssl            => $force_ssl,
     ssl                  => $ssl,
     ssl_only             => $ssl_only,
     location             => '/',
