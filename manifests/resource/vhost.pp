@@ -62,7 +62,8 @@ define nginx::resource::vhost(
   $rewrite_www_to_non_www = false,
   $location_cfg_prepend   = undef,
   $location_cfg_append    = undef,
-  $try_files              = undef
+  $try_files              = undef,
+  $max_body_size          = $nginx::params::nx_client_max_body_size,
 ) {
 
   File {
