@@ -31,5 +31,6 @@ http {
   gzip_disable "MSIE [1-6]\.(?!.*SV1)";
   <% end %>
 
+  server_names_hash_bucket_size 64;
   include /etc/nginx/conf.d/*.conf;
 }
