@@ -82,12 +82,7 @@ define nginx::resource::location(
 
   # force ssl
   if ($force_ssl == 'true') {
-    #$location_cfg_prepend = { rewrite => '^(.*) https://$host$1 permanent' }
-    #$location_cfg_append = { proxy_set_header => 'X-Forwarded-Proto https' } 
     $location_extra = template('nginx/vhost/vhost_location_force_ssl.erb')
-    if ($proxy != undef) {
-      $location_proxy_extra = template('nginx/vhost/vhost_location_proxy_ssl.erb')
-    }
   }
 
   # Use proxy template if $proxy is defined, otherwise use directory template.
