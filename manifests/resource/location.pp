@@ -80,10 +80,18 @@ define nginx::resource::location(
     default  => file,
   }
 
-  # Use proxy template if $proxy is defined, otherwise use directory template.
+  # force ssl
   if ($force_ssl == 'true') {
-    $content_real = template('nginx/vhost/vhost_location_force_ssl.erb')
-  } elsif ($proxy != undef) {
+    #$location_cfg_prepend = { rewrite => '^(.*) https://$host$1 permanent' }
+    #$location_cfg_append = { proxy_set_header => 'X-Forwarded-Proto https' } 
+    $location_extra = template('nginx/vhost/vhost_location_force_ssl.erb')
+    if ($proxy != undef) {
+      $location_proxy_extra = template('nginx/vhost/vhost_location_proxy_ssl.erb')
+    }
+  }
+
+  # Use proxy template if $proxy is defined, otherwise use directory template.
+  if ($proxy != undef) {
     $content_real = template('nginx/vhost/vhost_location_proxy.erb')
   } elsif ($location_alias != undef) {
     $content_real = template('nginx/vhost/vhost_location_alias.erb')

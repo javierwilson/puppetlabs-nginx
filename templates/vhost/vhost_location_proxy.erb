@@ -1,4 +1,7 @@
   location <%= location %> {
+<% if @location_extra -%>
+    <%= location_extra %>
+<% end -%>
 <% if @location_cfg_prepend -%><% location_cfg_prepend.each do |key,value| -%>
     <%= key %> <%= value %>;
 <% end -%><% end -%>
@@ -9,6 +12,9 @@
 <% end -%><% end -%>
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
+<% if @location_proxy_extra -%>
+    <%= location_proxy_extra %>
+<% end -%>
     <% if location != '/' %>
     proxy_set_header SCRIPT_NAME <%= location %>;
     <% end %>
