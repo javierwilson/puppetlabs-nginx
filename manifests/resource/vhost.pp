@@ -106,7 +106,6 @@
 #      options like error level to the end.
 #   [*passenger_cgi_param*]     - Allows one to define additional CGI environment
 #      variables to pass to the backend application
-=======
 #   [*include_www*]         - Adds "www.example.com" as a server name eg: server_name example.com www.example.com
 #   [*rewrite_www_to_non_www*]  - Adds a server directive and rewrite rule to rewrite www.domain.com to domain.com in order to avoid
 #                             duplicate content (SEO);
