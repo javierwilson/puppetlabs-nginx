@@ -44,6 +44,7 @@ http {
 <% end -%>
 <% end -%>
 
+  server_names_hash_bucket_size 64;
   include /etc/nginx/conf.d/*.conf;
   include <%= scope.lookupvar('nginx::params::nx_conf_dir') %>/sites-enabled/*;
 

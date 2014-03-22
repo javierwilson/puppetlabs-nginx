@@ -106,6 +106,13 @@
 #      options like error level to the end.
 #   [*passenger_cgi_param*]     - Allows one to define additional CGI environment
 #      variables to pass to the backend application
+=======
+#   [*include_www*]         - Adds "www.example.com" as a server name eg: server_name example.com www.example.com
+#   [*rewrite_www_to_non_www*]  - Adds a server directive and rewrite rule to rewrite www.domain.com to domain.com in order to avoid
+#                             duplicate content (SEO);
+#   [*try_files*]           - Specifies the locations for files to be checked as an array. Cannot be used in conjuction with $proxy.
+#   [*force_ssl*]           - Redirects http to https
+#
 # Actions:
 #
 # Requires:
@@ -131,6 +138,7 @@ define nginx::resource::vhost (
   $ipv6_listen_options    = 'default ipv6only=on',
   $add_header             = undef,
   $ssl                    = false,
+  $force_ssl              = false,
   $ssl_cert               = undef,
   $ssl_dhparam            = undef,
   $ssl_key                = undef,
@@ -160,7 +168,8 @@ define nginx::resource::vhost (
     'index.htm',
     'index.php'],
   $autoindex              = undef,
-  $server_name            = [$name],
+  $include_www            = false,
+  $server_name            = $include_www ? { true => [ "$name", "www.$name" ], default => ["$name"], },
   $www_root               = undef,
   $rewrite_www_to_non_www = false,
   $rewrite_to_https       = undef,
@@ -181,6 +190,7 @@ define nginx::resource::vhost (
   $passenger_cgi_param    = undef,
   $use_default_location   = true,
   $rewrite_rules          = [],
+  $max_body_size          = $nginx::params::nx_client_max_body_size,
 ) {
 
   validate_re($ensure, '^(present|absent)$',
@@ -376,6 +386,7 @@ define nginx::resource::vhost (
     nginx::resource::location {"${name_sanitized}-default":
       ensure              => $ensure,
       vhost               => $name_sanitized,
+      force_ssl           => $force_ssl,
       ssl                 => $ssl,
       ssl_only            => $ssl_only,
       location            => '/',

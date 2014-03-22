@@ -66,6 +66,7 @@
 #     401-499, 501-599. If the priority is higher than the default priority,
 #     the location will be defined after root, or before root.
 #
+#   [*force_ssl*]            - Redirects http to https
 #
 # Actions:
 #
@@ -115,6 +116,8 @@ define nginx::resource::location (
   $location_alias       = undef,
   $location_allow       = undef,
   $location_deny        = undef,
+  $force_ssl            = false,
+  $alias_root           = undef,
   $option               = undef,
   $stub_status          = undef,
   $location_custom_cfg  = undef,
@@ -242,6 +245,11 @@ define nginx::resource::location (
   }
   if (($www_root != undef) and ($proxy != undef)) {
     fail('Cannot define both directory and proxy in a virtual host')
+  }
+
+  # force ssl
+  if ($force_ssl == 'true') {
+    $location_extra = template('nginx/vhost/vhost_location_force_ssl.erb')
   }
 
   # Use proxy or fastcgi template if $proxy is defined, otherwise use directory template.
