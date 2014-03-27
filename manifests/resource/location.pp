@@ -248,7 +248,7 @@ define nginx::resource::location (
   }
 
   # force ssl
-  if ($force_ssl == 'true') {
+  if ($force_ssl == true) {
     $location_extra = template('nginx/vhost/vhost_location_force_ssl.erb')
   }
 
