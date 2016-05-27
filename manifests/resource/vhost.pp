@@ -276,7 +276,7 @@ define nginx::resource::vhost (
   $mode                         = $::nginx::config::global_mode,
   $maintenance                  = false,
   $maintenance_value            = 'return 503',
-  $locations                    = {}
+  $locations                    = {},
   $force_ssl                    = false,
   $include_www                  = false,
 ) {

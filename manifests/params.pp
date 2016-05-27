@@ -11,6 +11,7 @@ class nginx::params {
     'package_name' => 'nginx',
     'manage_repo'  => false,
   }
+  $_module_os_overrides = {}
   case $::osfamily {
     'ArchLinux': {
       $_module_os_overrides = {
