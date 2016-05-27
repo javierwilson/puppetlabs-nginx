@@ -160,6 +160,9 @@
 #   [*maintenance_value*]       - Value to return when maintenance is on.
 #                                 Default to return 503
 #   [*locations*]               - Hash of vhosts ressources used by this vhost
+#   [*include_www*]             - Adds "www.example.com" as a server name eg: server_name example.com www.example.com
+#   [*force_ssl*]               - Redirects http to https
+#
 # Actions:
 #
 # Requires:
@@ -231,7 +234,7 @@ define nginx::resource::vhost (
     'index.htm',
     'index.php'],
   $autoindex                    = undef,
-  $server_name                  = [$name],
+  $server_name                  = $include_www ? { true => [ "$name", "www.$name" ], default => ["$name"], },
   $www_root                     = undef,
   $rewrite_www_to_non_www       = false,
   $rewrite_to_https             = undef,
@@ -274,6 +277,8 @@ define nginx::resource::vhost (
   $maintenance                  = false,
   $maintenance_value            = 'return 503',
   $locations                    = {}
+  $force_ssl                    = false,
+  $include_www                  = false,
 ) {
 
   validate_re($ensure, '^(present|absent)$',
@@ -611,6 +616,7 @@ define nginx::resource::vhost (
       raw_prepend                 => $location_raw_prepend,
       raw_append                  => $location_raw_append,
       notify                      => Class['nginx::service'],
+      force_ssl                   => $force_ssl,
     }
     $root = undef
   } else {

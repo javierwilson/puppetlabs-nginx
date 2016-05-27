@@ -46,7 +46,7 @@ class nginx::config(
   $accept_mutex                   = 'on',
   $accept_mutex_delay             = '500ms',
   $client_body_buffer_size        = '128k',
-  $client_max_body_size           = '10m',
+  $client_max_body_size           = '30m',
   $events_use                     = false,
   $fastcgi_cache_inactive         = '20m',
   $fastcgi_cache_key              = false,

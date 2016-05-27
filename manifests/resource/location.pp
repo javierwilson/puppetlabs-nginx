@@ -92,6 +92,7 @@
 #   [*flv*]             - Indicates whether or not this loation can be
 #     used for flv streaming. Default: false
 #
+#   [*force_ssl*]            - Redirects http to https
 #
 # Actions:
 #
@@ -160,6 +161,8 @@ define nginx::resource::location (
   $location_satisfy     = undef,
   $location_allow       = undef,
   $location_deny        = undef,
+  $force_ssl            = false,
+  $alias_root           = undef,
   $option               = undef,
   $stub_status          = undef,
   $raw_prepend          = undef,
@@ -348,6 +351,11 @@ define nginx::resource::location (
 
   $location_sanitized_tmp = regsubst($location, '\/', '_', 'G')
   $location_sanitized = regsubst($location_sanitized_tmp, '\\\\', '_', 'G')
+
+  # force ssl
+  if ($force_ssl == true) {
+    $location_extra = template('nginx/vhost/vhost_location_force_ssl.erb')
+  }
 
   # Use proxy or fastcgi template if $proxy is defined, otherwise use directory template.
   if ($proxy != undef) {
