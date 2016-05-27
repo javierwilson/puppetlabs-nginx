@@ -65,7 +65,7 @@
 <% end -%>
 <% end -%><% end -%>
 <% if @location_extra -%>
-    <%= location_extra %>
+    <%= @location_extra %>
 <% end -%>
 <% if @location_cfg_prepend -%><% location_cfg_prepend.each do |key,value| -%>
     <%= key %> <%= value %>;
@@ -79,7 +79,7 @@
 <% if @location_proxy_extra -%>
     <%= location_proxy_extra %>
 <% end -%>
-<% if location != '/' %>
+<% if @location != '/' %>
     proxy_set_header SCRIPT_NAME <%= location %>;
 <% end %>
     proxy_redirect off;

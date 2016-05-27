@@ -32,7 +32,7 @@ class nginx::params {
   $nx_worker_rlimit_nofile    = 1024
   $nx_types_hash_max_size     = 1024
   $nx_types_hash_bucket_size  = 512
-  $nx_names_hash_bucket_size  = 64
+  $nx_names_hash_bucket_size  = 128
   $nx_names_hash_max_size     = 512
   $nx_multi_accept            = off
   # One of [kqueue|rtsig|epoll|/dev/poll|select|poll|eventport]
